@@ -3,21 +3,21 @@ import { LADDERS, SNAKES, cellNumber, move } from "./game";
 
 // Every visible string lives here so it can be matched to the design images in one place.
 const TEXT = {
-  title: "Snakes & Ladders",
+  title: "Snake & Ladders",
   rule: "Exact 100 is required to win. Land on a ladder to climb up, a snake to slide down.",
-  turn: (name) => `${name}'s turn`,
+  turn: (name) => `Turn: ${name}`,
   roll: "Roll Dice",
   rolled: (name, d) => `${name} rolled a ${d}`,
   start: "Start",
   winner: (name) => `${name} wins!`,
-  playAgain: "Play Again",
+  reset: "Reset",
   needExact: (name, d, need) => `${name} rolled ${d} but needs exactly ${need} to reach 100`,
   moved: (name, d, pos) => `${name} rolled ${d} and moved to ${pos}`,
   ladder: (name, d, from, to) => `${name} rolled ${d}, climbed a ladder from ${from} to ${to}`,
   snake: (name, d, from, to) => `${name} rolled ${d}, was bitten by a snake at ${from} and slid to ${to}`,
 };
 
-const PLAYERS = ["Player 1", "Player 2"];
+const PLAYERS = ["P1", "P2"];
 const ROWS = Array.from({ length: 10 }, (_, r) => Array.from({ length: 10 }, (_, c) => cellNumber(r, c)));
 
 export default function App() {
@@ -84,16 +84,14 @@ export default function App() {
 
       <div className="panel">
         {winner !== null ? (
-          <>
-            <p className="winner" role="status">{TEXT.winner(PLAYERS[winner])}</p>
-            <button type="button" className="btn" onClick={reset}>{TEXT.playAgain}</button>
-          </>
+          <p className="winner" role="status">{TEXT.winner(PLAYERS[winner])}</p>
         ) : (
-          <>
-            <p className="turn">{TEXT.turn(PLAYERS[turn])}</p>
-            <button type="button" className="btn" onClick={roll}>{TEXT.roll}</button>
-          </>
+          <p className="turn">{TEXT.turn(PLAYERS[turn])}</p>
         )}
+        <div className="buttons">
+          <button type="button" className="btn" onClick={roll} disabled={winner !== null}>{TEXT.roll}</button>
+          <button type="button" className="btn ghost" onClick={reset}>{TEXT.reset}</button>
+        </div>
         {dice !== null && <p className="dice" aria-label={`Dice ${dice}`}>{dice}</p>}
         {message && <p className="message" role="status">{message}</p>}
       </div>
